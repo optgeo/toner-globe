@@ -139,8 +139,8 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        13; "rgba(150, 150, 150, 0.8)"
-        17; "rgba(80, 80, 80, 1)"
+        13; "rgb(150, 150, 150)"
+        17; "rgb(80, 80, 80)"
       }
       ["line-width"] = new {
         "interpolate"
@@ -174,10 +174,10 @@ layers = new {
       ["line-color"] = new {
         "step"
         new { "zoom" }
-        "rgba(0, 0, 0, 0.15)"
-        10; "rgba(0, 0, 0, 0.25)"
-        12; "rgba(0, 0, 0, 0.4)"
-        15; "rgba(0, 0, 0, 0.6)"
+        "rgb(220, 220, 220)"
+        10; "rgb(190, 190, 190)"
+        12; "rgb(150, 150, 150)"
+        15; "rgb(100, 100, 100)"
       }
       ["line-width"] = new {
         "step"
@@ -213,9 +213,9 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        8; "rgba(0, 0, 0, 0.08)"
-        10; "rgba(0, 0, 0, 0.3)"
-        17; "rgba(0, 0, 0, 0.6)"
+        8; "rgb(240, 240, 240)"
+        10; "rgb(180, 180, 180)"
+        17; "rgb(100, 100, 100)"
       }
       ["line-width"] = new {
         "interpolate"
@@ -251,9 +251,9 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        6; "rgba(240, 240, 240, 0.8)"
-        10; "rgba(255, 255, 255, 0.9)"
-        16; "rgba(255, 255, 255, 1)"
+        6; "rgb(245, 245, 245)"
+        10; "rgb(255, 255, 255)"
+        16; "rgb(255, 255, 255)"
       }
       ["line-opacity"] = 1
       ["line-width"] = new {
@@ -289,9 +289,9 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        6; "rgba(0, 0, 0, 0.01)"
-        10; "rgba(0, 0, 0, 0.3)"
-        16; "rgba(0, 0, 0, 0.6)"
+        6; "rgb(240, 240, 240)"
+        10; "rgb(180, 180, 180)"
+        16; "rgb(80, 80, 80)"
       }
       ["line-opacity"] = 1
       ["line-width"] = new {
@@ -336,7 +336,13 @@ layers = new {
     ["source"] = "openmaptiles"
     ["source-layer"] = "boundary"
     ["minzoom"] = 3
-    ["filter"] = new { "all"; new { "=="; "admin_level"; 2 }; new { "=="; "$type"; "LineString" } }
+    ["filter"] = new { 
+      "all"
+      new { "=="; "admin_level"; 2 }
+      new { "=="; "$type"; "LineString" }
+      new { "!="; "maritime"; 1 }
+      new { "!="; "disputed"; 1 }
+    }
     ["layout"] = new {
       ["line-cap"] = "round"
       ["line-join"] = "round"
@@ -347,22 +353,59 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        3; "rgba(120, 120, 120, 0.6)"
-        8; "rgba(100, 100, 100, 0.8)"
-        14; "rgba(80, 80, 80, 1)"
+        3; "rgb(180, 180, 180)"
+        8; "rgb(160, 160, 160)"
+        14; "rgb(140, 140, 140)"
       }
       ["line-width"] = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        3; 0.5
-        8; 1.5
-        14; 3
+        3; 1.0
+        8; 2.5
+        14; 5.0
       }
       ["line-dasharray"] = new { 3; 2; 1; 2 }
     }
   }
   
+  // Place labels - states/provinces
+  new {
+    ["id"] = "place_state"
+    ["type"] = "symbol"
+    ["source"] = "openmaptiles"
+    ["source-layer"] = "place"
+    ["minzoom"] = 4
+    ["maxzoom"] = 14
+    ["filter"] = new { "all"; new { "=="; "class"; "state" }; new { "=="; "$type"; "Point" } }
+    ["layout"] = new {
+      ["text-field"] = new {
+        "case"
+        new { "has"; "name:ja" }
+        new { "get"; "name:ja" }
+        new { "get"; "name" }
+      }
+      ["text-font"] = new { "Noto Sans JP Regular"; "Open Sans Regular" }
+      ["text-size"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        4; 10
+        8; 12
+        12; 14
+      }
+      ["text-transform"] = "uppercase"
+      ["visibility"] = "visible"
+      ["text-anchor"] = "center"
+      ["text-max-width"] = 10
+    }
+    ["paint"] = new {
+      ["text-color"] = "rgba(0, 0, 0, 0.8)"
+      ["text-halo-color"] = "rgba(255, 255, 255, 0.9)"
+      ["text-halo-width"] = 1.5
+    }
+  }
+
   // Place labels - cities
   new {
     ["id"] = "place_city"
@@ -397,6 +440,46 @@ layers = new {
       ["text-color"] = "rgba(0, 0, 0, 0.8)"
       ["text-halo-color"] = "rgba(255, 255, 255, 0.9)"
       ["text-halo-width"] = 1.5
+    }
+  }
+  
+  // Place labels - countries (最優先表示)
+  new {
+    ["id"] = "place_country"
+    ["type"] = "symbol"
+    ["source"] = "openmaptiles"
+    ["source-layer"] = "place"
+    ["minzoom"] = 2
+    ["filter"] = new { "all"; new { "=="; "class"; "country" }; new { "=="; "$type"; "Point" } }
+    ["layout"] = new {
+      ["text-field"] = new {
+        "case"
+        new { "has"; "name:ja" }
+        new { "get"; "name:ja" }
+        new { "get"; "name" }
+      }
+      ["text-font"] = new { "Noto Sans JP Bold"; "Open Sans Bold" }
+      ["text-size"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        2; 12
+        4; 16
+        6; 20
+      }
+      ["text-transform"] = "none"
+      ["visibility"] = "visible"
+      ["text-anchor"] = "center"
+      ["text-max-width"] = 10
+      ["text-padding"] = 2
+      ["text-allow-overlap"] = true
+      ["text-ignore-placement"] = true
+      ["symbol-sort-key"] = 1
+    }
+    ["paint"] = new {
+      ["text-color"] = "rgba(0, 0, 0, 1.0)"
+      ["text-halo-color"] = "rgba(255, 255, 255, 1.0)"
+      ["text-halo-width"] = 2.5
     }
   }
 }

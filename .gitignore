@@ -137,3 +137,86 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# === Toner Globe Project Specific ===
+
+# Development build artifacts (keep docs/ for GitHub Pages)
+dist/
+build/
+
+# Temporary style generation files
+*.pkl.json
+style-temp/
+temp-styles/
+
+# Local development server files
+.vite/
+.vite-cache/
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows system files
+desktop.ini
+$RECYCLE.BIN/
+
+# Local environment configuration
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test artifacts
+coverage/
+test-results/
+.nyc_output/
+
+# Pkl cache (if any)
+.pkl-cache/
+pkl-cache/
+
+# Development and test Pkl files
+test-*.pkl
+test-expressions.pkl
+temp-*.pkl
+debug-*.pkl
+
+# Local configuration overrides
+config.local.*
+*.local.json
+
+# Debug files
+debug.log
+error.log
+*.debug
+
+# npm/yarn lock conflicts
+package-lock.json.orig
+yarn.lock.orig
+
+# Documentation build artifacts (keep main docs/ for GitHub Pages)
+docs-temp/
+api-docs/
+
+# === Keep these files for GitHub Pages deployment ===
+# docs/index.html - Production HTML
+# docs/style.json - Generated MapLibre style
+# docs/assets/ - Built assets

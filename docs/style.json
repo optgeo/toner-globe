@@ -182,9 +182,9 @@
             "zoom"
           ],
           13,
-          "rgba(150, 150, 150, 0.8)",
+          "rgb(150, 150, 150)",
           17,
-          "rgba(80, 80, 80, 1)"
+          "rgb(80, 80, 80)"
         ],
         "line-width": [
           "interpolate",
@@ -242,13 +242,13 @@
           [
             "zoom"
           ],
-          "rgba(0, 0, 0, 0.15)",
+          "rgb(220, 220, 220)",
           10,
-          "rgba(0, 0, 0, 0.25)",
+          "rgb(190, 190, 190)",
           12,
-          "rgba(0, 0, 0, 0.4)",
+          "rgb(150, 150, 150)",
           15,
-          "rgba(0, 0, 0, 0.6)"
+          "rgb(100, 100, 100)"
         ],
         "line-width": [
           "step",
@@ -306,11 +306,11 @@
             "zoom"
           ],
           8,
-          "rgba(0, 0, 0, 0.08)",
+          "rgb(240, 240, 240)",
           10,
-          "rgba(0, 0, 0, 0.3)",
+          "rgb(180, 180, 180)",
           17,
-          "rgba(0, 0, 0, 0.6)"
+          "rgb(100, 100, 100)"
         ],
         "line-width": [
           "interpolate",
@@ -371,11 +371,11 @@
             "zoom"
           ],
           6,
-          "rgba(240, 240, 240, 0.8)",
+          "rgb(245, 245, 245)",
           10,
-          "rgba(255, 255, 255, 0.9)",
+          "rgb(255, 255, 255)",
           16,
-          "rgba(255, 255, 255, 1)"
+          "rgb(255, 255, 255)"
         ],
         "line-opacity": 1,
         "line-width": [
@@ -435,11 +435,11 @@
             "zoom"
           ],
           6,
-          "rgba(0, 0, 0, 0.01)",
+          "rgb(240, 240, 240)",
           10,
-          "rgba(0, 0, 0, 0.3)",
+          "rgb(180, 180, 180)",
           16,
-          "rgba(0, 0, 0, 0.6)"
+          "rgb(80, 80, 80)"
         ],
         "line-opacity": 1,
         "line-width": [
@@ -505,6 +505,16 @@
           "==",
           "$type",
           "LineString"
+        ],
+        [
+          "!=",
+          "maritime",
+          1
+        ],
+        [
+          "!=",
+          "disputed",
+          1
         ]
       ],
       "layout": {
@@ -522,11 +532,11 @@
             "zoom"
           ],
           3,
-          "rgba(120, 120, 120, 0.6)",
+          "rgb(180, 180, 180)",
           8,
-          "rgba(100, 100, 100, 0.8)",
+          "rgb(160, 160, 160)",
           14,
-          "rgba(80, 80, 80, 1)"
+          "rgb(140, 140, 140)"
         ],
         "line-width": [
           "interpolate",
@@ -537,11 +547,11 @@
             "zoom"
           ],
           3,
-          0.5,
+          1.0,
           8,
-          1.5,
+          2.5,
           14,
-          3
+          5.0
         ],
         "line-dasharray": [
           3,
@@ -549,6 +559,72 @@
           1,
           2
         ]
+      }
+    },
+    {
+      "id": "place_state",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 4,
+      "maxzoom": 14,
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "state"
+        ],
+        [
+          "==",
+          "$type",
+          "Point"
+        ]
+      ],
+      "layout": {
+        "text-field": [
+          "case",
+          [
+            "has",
+            "name:ja"
+          ],
+          [
+            "get",
+            "name:ja"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans JP Regular",
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          10,
+          8,
+          12,
+          12,
+          14
+        ],
+        "text-transform": "uppercase",
+        "visibility": "visible",
+        "text-anchor": "center",
+        "text-max-width": 10
+      },
+      "paint": {
+        "text-color": "rgba(0, 0, 0, 0.8)",
+        "text-halo-color": "rgba(255, 255, 255, 0.9)",
+        "text-halo-width": 1.5
       }
     },
     {
@@ -618,6 +694,75 @@
         "text-color": "rgba(0, 0, 0, 0.8)",
         "text-halo-color": "rgba(255, 255, 255, 0.9)",
         "text-halo-width": 1.5
+      }
+    },
+    {
+      "id": "place_country",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 2,
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "country"
+        ],
+        [
+          "==",
+          "$type",
+          "Point"
+        ]
+      ],
+      "layout": {
+        "text-field": [
+          "case",
+          [
+            "has",
+            "name:ja"
+          ],
+          [
+            "get",
+            "name:ja"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Noto Sans JP Bold",
+          "Open Sans Bold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          2,
+          12,
+          4,
+          16,
+          6,
+          20
+        ],
+        "text-transform": "none",
+        "visibility": "visible",
+        "text-anchor": "center",
+        "text-max-width": 10,
+        "text-padding": 2,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "symbol-sort-key": 1
+      },
+      "paint": {
+        "text-color": "rgba(0, 0, 0, 1.0)",
+        "text-halo-color": "rgba(255, 255, 255, 1.0)",
+        "text-halo-width": 2.5
       }
     }
   ]
