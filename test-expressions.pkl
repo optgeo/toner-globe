@@ -1,0 +1,20 @@
+/// Test modern MapLibre expressions
+version = 8
+name = "Test Style"
+sources = new {
+  ["test"] = new {
+    ["type"] = "vector"
+    ["url"] = "https://example.com"
+  }
+}
+layers = new {
+  new {
+    ["id"] = "test-layer"
+    ["type"] = "line"
+    ["source"] = "test"
+    ["paint"] = new {
+      ["line-color"] = new { "interpolate"; new { "linear" }; new { "zoom" }; 5; "red"; 10; "blue" }
+      ["line-width"] = new { "step"; new { "zoom" }; 1; 8; 2; 12; 4 }
+    }
+  }
+}

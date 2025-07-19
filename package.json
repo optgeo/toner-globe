@@ -1,0 +1,44 @@
+{
+  "name": "toner-globe",
+  "version": "1.0.0",
+  "description": "MapLibre GL JS Globe Toner Site with Japanese labels and monochromatic design",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run style:check && vite",
+    "build": "npm run style:generate && vite build",
+    "preview": "vite preview",
+    "style:generate": "pkl eval -f json style-generation/style.pkl > docs/style.json",
+    "style:simple": "pkl eval -f json style-generation/simple-style.pkl > docs/style.json",
+    "style:check": "npm run style:generate",
+    "deploy": "npm run build && git add docs && git commit -m 'Deploy to GitHub Pages' && git push origin main",
+    "clean": "rm -rf docs/style.json dist",
+    "serve": "python3 -m http.server 8080 --directory docs",
+    "lint:style": "jq . docs/style.json > /dev/null && echo 'style.json is valid'",
+    "help": "echo 'Available commands: dev, build, preview, style:generate, style:simple, deploy, clean, serve, lint:style'"
+  },
+  "keywords": [
+    "maplibre",
+    "maplibre-gl-js",
+    "globe",
+    "toner",
+    "openstreetmap",
+    "japan",
+    "pkl",
+    "vite",
+    "github-pages"
+  ],
+  "author": "optgeo",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "maplibre-gl": "^5.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/optgeo/toner-globe.git"
+  },
+  "homepage": "https://optgeo.github.io/toner-globe/"
+}

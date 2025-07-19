@@ -1,0 +1,103 @@
+/// Configuration for colors used throughout the toner style
+module toner.config.Colors
+
+/// Background colors
+background: String = "#fff"
+
+/// Water colors (淡く調整)
+water: String = "rgba(0, 0, 0, 0.15)"
+
+/// Land cover colors (淡く調整)
+class LandCover {
+  grass_fill: String = "rgba(0, 0, 0, 0.05)"
+  grass_fill_high_zoom: String = "rgba(0, 0, 0, 0.12)"
+  wood: String = "rgba(0, 0, 0, 0.12)"
+  scrub: String = "rgba(0, 0, 0, 0.08)"
+  cemetery_fill: String = "rgba(0, 0, 0, 0.06)"
+  cemetery_outline: String = "rgba(0, 0, 0, 0.3)"
+  default: String = "rgba(0, 0, 0, 0.03)"
+}
+
+landcover: LandCover = new LandCover {}
+
+/// Transportation colors (淡く調整)
+class Transportation {
+  rail_light: String = "rgba(150, 150, 150, 0.8)"
+  rail_dark: String = "rgba(80, 80, 80, 1)"
+  road_secondary_light: String = "rgba(0, 0, 0, 0.15)"
+  road_secondary_medium: String = "rgba(0, 0, 0, 0.25)"
+  road_secondary_medium_high: String = "rgba(0, 0, 0, 0.4)"
+  road_secondary_dark: String = "rgba(0, 0, 0, 0.6)"
+  road_primary_light: String = "rgba(0, 0, 0, 0.08)"
+  road_primary_medium: String = "rgba(0, 0, 0, 0.3)"
+  road_primary_dark: String = "rgba(0, 0, 0, 0.6)"
+  highway_casing_light: String = "rgba(240, 240, 240, 0.8)"
+  highway_casing_white: String = "rgba(255, 255, 255, 0.9)"
+  highway_casing_white_full: String = "rgba(255, 255, 255, 1)"
+  highway_light: String = "rgba(0, 0, 0, 0.01)"
+  highway_medium: String = "rgba(0, 0, 0, 0.3)"
+  highway_dark: String = "rgba(0, 0, 0, 0.6)"
+}
+
+transportation: Transportation = new Transportation {}
+
+/// Land use colors (淡く調整)
+class Landuse {
+  park: String = "rgba(0, 0, 0, 0.06)"
+  grass: String = "rgba(0, 0, 0, 0.05)"
+  scrub: String = "rgba(0, 0, 0, 0.08)"
+  wood: String = "rgba(0, 0, 0, 0.12)"
+  residential: String = "rgba(0, 0, 0, 0.04)"
+  commercial: String = "rgba(0, 0, 0, 0.05)"
+  industrial: String = "rgba(0, 0, 0, 0.06)"
+  cemetery: String = "rgba(0, 0, 0, 0.04)"
+  hospital: String = "rgba(0, 0, 0, 0.04)"
+  school: String = "rgba(0, 0, 0, 0.04)"
+  pitch: String = "rgba(0, 0, 0, 0.05)"
+  default: String = "rgba(0, 0, 0, 0.04)"
+}
+
+landuse: Landuse = new Landuse {}
+
+/// Building colors (淡く調整)
+class Building {
+  light: String = "rgba(0, 0, 0, 0.08)"
+  medium: String = "rgba(0, 0, 0, 0.08)"
+  dark: String = "rgba(0, 0, 0, 0.08)"
+  outline: String = "rgba(0, 0, 0, 0.3)"
+}
+
+building: Building = new Building {}
+
+/// Boundary colors (淡く調整)
+class Boundary {
+  country_light: String = "rgba(120, 120, 120, 0.6)"
+  country_medium: String = "rgba(100, 100, 100, 0.8)"
+  country_dark: String = "rgba(80, 80, 80, 1)"
+  state_light: String = "rgba(140, 140, 140, 0.5)"
+  state_medium: String = "rgba(100, 100, 100, 0.7)"
+  state_dark: String = "rgba(80, 80, 80, 0.9)"
+  city: String = "rgba(150, 150, 150, 0.6)"
+}
+
+boundary: Boundary = new Boundary {}
+
+/// Text colors (淡く調整)
+class Text {
+  primary: String = "rgba(0, 0, 0, 0.8)"
+  water: String = "rgba(255, 255, 255, 0.9)"
+  halo: String = "rgba(255, 255, 255, 0.9)"
+  country: String = "rgba(0, 0, 0, 0.8)"
+  state: String = "rgba(20, 20, 20, 0.8)"
+  city: String = "rgba(0, 0, 0, 0.8)"
+  town: String = "rgba(20, 20, 20, 0.8)"
+  village: String = "rgba(11, 11, 11, 0.8)"
+  road: String = "rgba(0, 0, 0, 0.7)"
+  island: String = "rgba(51, 51, 51, 0.8)"
+  island_halo: String = "rgba(255, 255, 255, 0.8)"
+}
+
+text: Text = new Text {}
+
+/// Island colors
+island: String = "#fff"

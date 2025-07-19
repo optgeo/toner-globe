@@ -47,6 +47,9 @@ Create a MapLibre GL JS site that references [this OpenStreetMap Japan Toner sty
 - MapLibre GL JS
 - Vite
 
+## Technical Notes
+- You can use jq to investigate and manipulate JSON files.
+
 ## Expected Output
 A web application that displays a globe view of OpenStreetMap data with Japanese labels, styled similar to the OpenStreetMap Japan Toner style but with customizations as specified.
 
