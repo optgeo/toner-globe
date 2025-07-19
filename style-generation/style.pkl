@@ -1,9 +1,9 @@
 /// MapLibre Toner style configuration - Modular version
 
 version = 8
-name = "Toner en"
-center = new { -74.5975; 42.8746 }
-zoom = 1.5
+name = "Toner ja"
+center = new { 74.5698; 42.8746 }
+zoom = 4
 bearing = 0
 pitch = 0
 sources = new {

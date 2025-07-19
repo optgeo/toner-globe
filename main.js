@@ -1,12 +1,18 @@
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+// 環境に応じたstyle.jsonパスを決定
+const getStylePath = () => {
+    // 開発環境の場合は絶対パス、本番環境の場合は相対パス
+    return import.meta.env.DEV ? '/style.json' : './style.json';
+};
+
 // MapLibre GL JSマップの初期化
 const map = new maplibregl.Map({
     container: 'map',
-    style: './docs/style.json', // モジュラー生成されたスタイル
-    center: [138.7274, 35.3606], // 日本の中心
-    zoom: 4, // 日本全体が見える適切なズーム
+    style: getStylePath(),
+    center: [74.5698, 42.8746], // キルギス・ビシュケクの中心
+    zoom: 4, // 中央アジア全体が見える適切なズーム
     pitch: 0, // 正面から見る角度
     bearing: 0,
     projection: 'globe', // 地球儀モード

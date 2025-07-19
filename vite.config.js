@@ -23,8 +23,8 @@ export default defineConfig({
         port: 3000
     },
     
-    // ベースパス設定（GitHub Pagesの場合）
-    base: process.env.NODE_ENV === 'production' ? '/toner-globe/' : '/',
+    // ベースパス設定（GitHub Pagesの場合は相対パス）
+    base: './',
     
     // アセット処理設定
     assetsInclude: ['**/*.json'],

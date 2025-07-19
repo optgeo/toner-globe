@@ -2,7 +2,17 @@
 
 This document contains technical implementation details, troubleshooting information, and development considerations for the MapLibre GL JS Globe Toner Site project.
 
+## Project Overview
+
+The application displays a 3D globe view centered on **Bishkek, Kyrgyzstan** (74.5698°E, 42.8746°N), showcasing Central Asian geography with a monochromatic Toner style design.
+
 ## Recent Development History
+
+### Map Center Update (July 2025)
+
+- **Geographic focus**: Changed from Japan to Central Asia, centered on Bishkek, Kyrgyzstan
+- **Coordinate update**: Updated both style.pkl and main.js to use [74.5698, 42.8746]
+- **Regional coverage**: Provides excellent view of Central Asian countries and Silk Road regions
 
 ### UI Simplification (July 2025)
 
@@ -52,9 +62,51 @@ This document contains technical implementation details, troubleshooting informa
 - **Font Configuration**: Prioritize Japanese text rendering (`name:ja` → `name`)
 - **Data Sources**: Vector tiles from OpenStreetMap Japan infrastructure
 
-### Apple Pkl Style Configuration
+### Apple Pkl Configuration System
 
-The project uses Apple Pkl for type-safe, modular style generation:
+Using Apple Pkl provides type-safe, modular configuration for MapLibre GL styles:
+
+### Modular Design
+
+- `style.pkl`: Main entry point orchestrating all components
+- `config/`: Shared configurations (colors, sources, fonts)
+- `layers/`: Layer-specific configurations organized by type
+
+### Type Safety Benefits
+
+- **Compile-time validation**: Catches configuration errors before deployment
+- **IntelliSense support**: Better IDE experience with auto-completion  
+- **Schema enforcement**: Ensures valid MapLibre style output
+- **Refactoring safety**: Changes propagate correctly across modules
+
+### Pkl Advantages Over JSON
+
+- **Comments and documentation**: Self-documenting configuration
+- **Variable reuse**: DRY principle for colors, fonts, sizes
+- **Conditional logic**: Dynamic configuration based on context
+- **Imports/modules**: Better organization than monolithic JSON
+
+## Technical Architecture
+
+### Build Pipeline
+
+```bash
+style-generation/style.pkl → pkl eval → docs/style.json → MapLibre GL JS
+```
+
+### Style Development Workflow
+
+1. **Edit Pkl files**: Modify style configuration with type safety
+2. **Generate style**: `make style` compiles to JSON
+3. **Preview changes**: `make dev` starts development server  
+4. **Deploy**: `make build` creates production files in docs/
+
+### Globe Performance Considerations
+
+- **Vector tiles**: OpenStreetMap Japan provides efficient data delivery
+- **Style optimization**: Pkl generates minimal, optimized JSON
+- **Static hosting**: GitHub Pages serves pre-built assets efficiently
+- **Globe rendering**: MapLibre GL JS handles 3D calculations natively
 
 #### Expression Syntax Migration
 

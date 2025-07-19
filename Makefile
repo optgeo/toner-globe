@@ -4,7 +4,9 @@
 
 style:
 	# Generate style.json from modular style.pkl
-	pkl eval -f json style-generation/style.pkl > docs/style.json
+	pkl eval -f json style-generation/style.pkl > public/style.json
+	# Copy to docs for GitHub Pages deployment
+	cp public/style.json docs/style.json
 
 dev:
 	# Start Vite development server
@@ -13,10 +15,12 @@ dev:
 build:
 	# Build static site to docs directory
 	npm run build
+	# Ensure style.json is in docs for GitHub Pages
+	cp public/style.json docs/style.json
 
 clean:
 	# Clean generated files
-	rm -rf docs/style.json
+	rm -rf public/style.json docs/style.json
 
 help:
 	# Display available commands

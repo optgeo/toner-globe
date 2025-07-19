@@ -1,8 +1,9 @@
 # 🌍 Toner Globe
 
-A modern web application that displays OpenStreetMap data in an interactive 3D globe view using MapLibre GL JS, styled with a customizable monochromatic Toner theme featuring Japanese labels.
+A modern web application that displays OpenStreetMap data in an interactive 3D globe view using MapLibre GL JS, styled with a customizable monochromatic Toner theme featuring Japanese labels. The application showcases Central Asia, centered on Bishkek, Kyrgyzstan.
 
 🔗 **Live Demo**: [https://optgeo.github.io/toner-globe/](https://optgeo.github.io/toner-globe/)
+📂 **Repository**: [https://github.com/optgeo/toner-globe](https://github.com/optgeo/toner-globe)
 
 ![Toner Globe Preview](https://img.shields.io/badge/MapLibre-GL%20JS-blue) ![Pkl](https://img.shields.io/badge/Apple-Pkl-orange) ![Vite](https://img.shields.io/badge/Vite-Build-purple) ![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-green)
 
@@ -10,6 +11,7 @@ A modern web application that displays OpenStreetMap data in an interactive 3D g
 
 - 🌍 **3D Globe Mode**: Interactive globe visualization with atmosphere effects
 - 🗺️ **Toner Style**: Elegant monochromatic design based on OpenStreetMap Japan Toner
+- 🇰🇬 **Central Asia View**: Centered on Bishkek, Kyrgyzstan, showcasing Central Asian geography
 - 🇯🇵 **Japanese Labels**: Prioritizes Japanese text rendering (`name:ja`) with English fallback
 - 📐 **Type-Safe Configuration**: Uses Apple Pkl for maintainable style generation
 - ⚡ **Fast Development**: Vite-powered development server with hot reload
