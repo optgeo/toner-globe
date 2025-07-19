@@ -13,20 +13,18 @@ A modern web application that displays OpenStreetMap data in an interactive 3D g
 - 🇯🇵 **Japanese Labels**: Prioritizes Japanese text rendering (`name:ja`) with English fallback
 - 📐 **Type-Safe Configuration**: Uses Apple Pkl for maintainable style generation
 - ⚡ **Fast Development**: Vite-powered development server with hot reload
-- 📱 **Responsive UI**: Interactive controls for pitch, zoom, and projection modes
+- 📱 **Clean Interface**: Minimalist design focusing on the map content
+- 🌐 **Globe Controls**: Built-in projection switching between Globe and Mercator modes
 - 🚀 **Easy Deployment**: One-command deployment to GitHub Pages
 - 🎯 **Modular Architecture**: Clean separation of styles, layers, and configuration
+- 🗾 **Smart Boundary Display**: Excludes maritime and disputed boundaries for cleaner visualization
 
 ## 🎮 Interactive Controls
 
-- **Globe/Mercator Toggle**: Switch between 3D globe and flat map projections
-- **Pitch Control**: Adjust viewing angle from 0° to 60°
-- **Zoom Control**: Fine-tune zoom levels with slider
-- **Reset to Japan**: Quick navigation to Japan with smooth animation
-- **Keyboard Shortcuts**:
-  - `G` - Toggle globe mode
-  - `R` - Reset view to Japan
-  - `F` - Enter fullscreen mode
+- **Globe/Mercator Toggle**: Switch between 3D globe and flat map projections using built-in MapLibre GlobeControl
+- **Navigation Controls**: Zoom, rotation, and pitch adjustment with standard MapLibre controls
+- **Scale Display**: Metric distance scale indicator
+- **Clean UI**: No complex control panels - focus on the map itself
 
 ## 🚀 Quick Start
 
@@ -125,6 +123,10 @@ npm run lint:style
 - **Japanese Labels**: Automatic `name:ja` field usage with fallback
 - **Performance Optimized**: Efficient layer definitions for smooth globe rendering
 - **Globe-Friendly**: Designed specifically for 3D globe projection
+- **Smart Boundaries**: Maritime and disputed boundaries excluded for cleaner visualization
+- **Hierarchy Labels**: Countries prioritized over states/cities for clear identification
+- **Optimized Roads**: Solid colors without alpha transparency to prevent overlapping artifacts
+- **Clean Build**: Simple asset names without hash suffixes for better version control
 
 ## 📦 Available Commands
 
@@ -153,6 +155,9 @@ The Toner Globe design emphasizes:
 - **Accessibility**: High contrast and readable typography
 - **Performance**: Optimized for smooth 3D globe interactions
 - **Internationalization**: Japanese-first labeling with international fallbacks
+- **Geographic Clarity**: Smart boundary filtering to avoid political complexity
+- **Label Hierarchy**: Countries always visible, with states and cities as secondary information
+- **Visual Consistency**: Solid colors and clean lines without transparency artifacts
 
 ## 🤝 Contributing
 

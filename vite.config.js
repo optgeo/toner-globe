@@ -8,6 +8,12 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: 'index.html'
+            },
+            output: {
+                // シンプルなファイル名で出力、ハッシュなし
+                entryFileNames: 'assets/main.js',
+                chunkFileNames: 'assets/[name].js',
+                assetFileNames: 'assets/[name].[ext]'
             }
         }
     },

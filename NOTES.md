@@ -1,6 +1,28 @@
-# Technical Details and Considerations
+# Technical Details and Implementation Notes
 
 This document contains technical implementation details, troubleshooting information, and development considerations for the MapLibre GL JS Globe Toner Site project.
+
+## Recent Development History
+
+### UI Simplification (July 2025)
+
+- **Removed complex control panels**: Eliminated pitch/zoom sliders and toggle buttons for cleaner interface
+- **Removed loading indicators**: Direct map loading for immediate user engagement  
+- **Removed keyboard shortcuts**: Simplified interaction model focusing on native MapLibre controls
+- **Added GlobeControl**: Integrated MapLibre GL JS 5.6.1's built-in globe/mercator switching
+
+### Style Improvements
+
+- **Country name priority**: Countries now display above states/cities with `text-allow-overlap: true`
+- **Alpha transparency removal**: Replaced `rgba()` with `rgb()` values to prevent road overlap artifacts
+- **Boundary filtering**: Excluded maritime (`maritime: 1`) and disputed (`disputed: 1`) boundaries
+- **Thicker, lighter borders**: Country borders made more visible but less intrusive
+
+### Build System Optimization
+
+- **Clean asset naming**: Removed hash suffixes from built files (`main.js`, `main.css`)
+- **Asset cleanup**: Prevent accumulation of old build files
+- **Simplified deployment**: Consistent file names for better version control
 
 ## Project Structure
 
