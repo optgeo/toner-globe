@@ -43,10 +43,6 @@ toner-globe/
   - 補間サイズ調整によるズーム応答タイポグラフィ
   - 中央アジア地理焦点（ビシュケク中心: 74.5698°E, 42.8746°N）
 
-#### `style-generation/simple-style.pkl`（参考）
-
-- **目的**: 簡略化された参考実装
-
 ### ファイル処理フロー
 
 #### プロセスフロー
@@ -103,6 +99,8 @@ toner-globe/
 ### MSXカラーパレット統合
 
 #### コアカラー定義
+
+MSX標準16色パレットをベースとした実装（[参照](https://paulwratt.github.io/programmers-palettes/HW-MSX/HW-MSX-palettes.html)）：
 
 ```pkl
 msxColors = new Mapping {

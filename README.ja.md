@@ -94,7 +94,7 @@ npm run build
 
 ### MSXカラーパレット
 
-アプリケーションは慎重にキュレーションされたMSXインスパイアのカラースキームを使用します：
+アプリケーションは慎重にキュレーションされたMSXインスパイアのカラースキームを使用します（[MSX標準16色パレット参照](https://paulwratt.github.io/programmers-palettes/HW-MSX/HW-MSX-palettes.html)）：
 
 #### プライマリカラー
 
@@ -104,6 +104,8 @@ npm run build
 - **ラベル**: モノクロマティック階層 - 黒からライトグレー（#999999）
 
 #### 技術実装
+
+MSX標準16色パレットをベースとした実装（[参照](https://paulwratt.github.io/programmers-palettes/HW-MSX/HW-MSX-palettes.html)）：
 
 ```pkl
 msxColors = new Mapping {

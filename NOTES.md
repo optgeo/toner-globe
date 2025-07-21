@@ -55,11 +55,6 @@ toner-globe/
   - Zoom-responsive typography with interpolated sizing
   - Central Asia geographic focus (Bishkek center: 74.5698°E, 42.8746°N)
 
-#### `style-generation/simple-style.pkl` (Reference)
-- **Purpose**: Simplified reference implementation
-- **Usage**: Available via `npm run style:simple` for testing
-- **Status**: Maintained for comparison and backup purposes
-
 ### Build System
 
 #### Commands
@@ -128,9 +123,9 @@ text-color: "rgba(0, 0, 0, 0.5)"    // 50% opacity
 - **Trade-off**: Some code duplication accepted for stability
 
 ### File Cleanup (2025-07-20)
-- **Removed**: `layers/`, `config/`, experimental modular files
-- **Kept**: Working `style.pkl` and reference `simple-style.pkl`
-- **Result**: 2-file style generation system with clear purpose
+- **Removed**: `layers/`, `config/`, `simple-style.pkl`, experimental modular files
+- **Kept**: Working `style.pkl` as single source of truth
+- **Result**: Simplified single-file style generation system
 
 ### Label Hierarchy Implementation (2025-07-20)
 - **Country Labels**: Enhanced to 20% larger font size, 100% opacity
@@ -291,14 +286,11 @@ This reduction strategy maintains full visual fidelity while significantly impro
 │   ├── index.html            # Main application entry point
 │   └── style.json            # Generated MapLibre style
 ├── style-generation/          # Apple Pkl style configuration
-│   ├── style.pkl             # Modular style configuration (WIP)
-│   ├── simple-style.pkl      # Complete style configuration
-│   ├── config/               # Configuration modules
-│   │   ├── Colors.pkl        # Color palette definitions
-│   │   └── Sources.pkl       # Data source configurations
-│   └── layers/               # Layer-specific modules
-│       ├── Background.pkl    # Background layer definitions
-│       └── Water.pkl         # Water feature layers
+│   ├── style.pkl             # Main style configuration
+│   ├── constants.pkl         # MSX color palette and constants
+│   └── classes.pkl           # Reusable layer class definitions
+├── public/                    # Build output
+│   └── style.json            # Generated style file
 └── vite.config.js            # Vite build configuration
 ```
 

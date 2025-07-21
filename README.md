@@ -105,6 +105,8 @@ The application uses a carefully curated MSX-inspired color scheme:
 
 #### Technical Implementation
 
+Based on the standard MSX 16-color palette ([reference](https://paulwratt.github.io/programmers-palettes/HW-MSX/HW-MSX-palettes.html)):
+
 ```pkl
 msxColors = new Mapping {
   ["black"] = "#000000"

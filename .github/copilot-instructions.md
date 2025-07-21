@@ -28,20 +28,9 @@ A sophisticated 3D globe application showcasing Central Asian geography with com
 │   ├── style.json            # Generated MapLibre style (19KB)
 │   └── assets/               # Built application assets
 ├── style-generation/          # Apple Pkl configuration system
-│   ├── style.pkl             # Main comprehensive style (WIP: modular architecture)
-│   ├── simple-style.pkl      # Complete working style configuration
-│   ├── config/               # Shared configuration modules
-│   │   ├── Colors.pkl        # Toner color palette definitions
-│   │   └── Sources.pkl       # OpenStreetMap Japan data sources
-│   └── layers/               # Layer-specific configurations
-│       ├── Background.pkl    # Background layer definitions
-│       ├── Base.pkl          # Base map layers
-│       ├── Basic.pkl         # Basic geographic features
-│       ├── Boundaries.pkl    # Administrative boundaries
-│       ├── Buildings.pkl     # Building footprints
-│       ├── Labels.pkl        # Text label configurations
-│       ├── Transportation.pkl # Roads, railways, transit
-│       └── Water.pkl         # Waterways, water bodies
+│   ├── style.pkl             # Main style configuration
+│   ├── constants.pkl         # MSX color palette and constants  
+│   └── classes.pkl           # Reusable layer class definitions
 ├── main.js                   # MapLibre GL JS application logic
 ├── vite.config.js            # Vite build configuration
 └── package.json              # Dependencies and scripts
@@ -119,7 +108,6 @@ A sophisticated 3D globe application showcasing Central Asian geography with com
 ```bash
 make dev          # Start development server with HMR
 make style        # Generate style.json from Pkl configuration  
-npm run style:simple  # Use simple-style.pkl for testing
 ```
 
 #### **Production**
@@ -137,10 +125,10 @@ jq '.' docs/style.json   # Pretty-print style for inspection
 
 ### ⚠️ **Known Limitations & Future Work**
 
-#### **Modular Architecture (In Progress)**
-- `style.pkl` modular system under development
-- `simple-style.pkl` serves as working reference implementation
-- Layer module organization needs completion
+#### **Modular Architecture (Completed)**
+- MSX color system implemented in `constants.pkl`
+- Reusable layer classes defined in `classes.pkl` 
+- Single-file `style.pkl` architecture for reliability
 
 #### **Performance Considerations**
 - Large style.json size (19KB) - consider layer optimization

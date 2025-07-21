@@ -1,5 +1,6 @@
 // Toner style - MSX Color Palette Based
 // MSX標準16色パレットを基準とした色定義
+// Reference: https://paulwratt.github.io/programmers-palettes/HW-MSX/HW-MSX-palettes.html
 msxColors = new {
   // MSX Primary Colors (基本16色)
   black = "#000000"           // 0: Black
