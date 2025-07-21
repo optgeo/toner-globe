@@ -1,4 +1,7 @@
-/// MapLibre Toner style configuration - Modular version
+import "constants.pkl" as constants
+import "classes.pkl" as classes
+
+/// MapLibre Toner style configuration - Simplified with modular imports
 
 version = 8
 name = "Toner ja"
@@ -11,14 +14,6 @@ sources = new {
     ["type"] = "vector"
     ["url"] = "https://tile.openstreetmap.jp/data/planet.json"
   }
-  ["takeshima"] = new {
-    ["type"] = "vector"
-    ["url"] = "https://tile.openstreetmap.jp/data/takeshima.json"
-  }
-  ["hoppo"] = new {
-    ["type"] = "vector"
-    ["url"] = "https://tile.openstreetmap.jp/data/hoppo.json"
-  }
 }
 sprite = "https://tile.openstreetmap.jp/styles/maptiler-toner-en/sprite"
 glyphs = "https://tile.openstreetmap.jp/fonts/{fontstack}/{range}.pbf"
@@ -29,28 +24,44 @@ layers = new {
     ["id"] = "background"
     ["type"] = "background"
     ["paint"] = new {
-      ["background-color"] = "#fff"
+      ["background-color"] = constants.colors.background
     }
   }
   
   // Water features
-  new {
-    ["id"] = "water"
-    ["type"] = "fill"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "water"
-    ["filter"] = new {
+  new classes.FillLayer {
+    id = "water"
+    `source-layer` = "water"
+    filter = new {
       "all"
       new { "!="; "brunnel"; "tunnel" }
       new { "=="; "$type"; "Polygon" }
       new { "!="; "intermittent"; 1 }
     }
-    ["layout"] = new {
-      ["visibility"] = "visible"
-    }
-    ["paint"] = new {
+    paint = new {
       ["fill-antialias"] = true
-      ["fill-color"] = "rgba(0, 0, 0, 0.15)"
+      ["fill-color"] = constants.colors.water
+    }
+  }
+  
+  // Waterway lines
+  new classes.LineLayer {
+    id = "waterway"
+    `source-layer` = "waterway"
+    minzoom = 12
+    filter = new {
+      "all"
+      new { "!="; "brunnel"; "tunnel" }
+      new { "!="; "class"; "river" }
+    }
+    paint = new {
+      ["line-color"] = constants.colors.waterway
+      ["line-width"] = new {
+        "step"
+        new { "zoom" }
+        0.5
+        14; 1.5
+      }
     }
   }
   
@@ -66,31 +77,54 @@ layers = new {
     }
     ["paint"] = new {
       ["fill-color"] = new {
-        "case"
-        new { "=="; new { "get"; "class" }; "grass" }
-        "rgba(0, 0, 0, 0.05)"
-        new { "=="; new { "get"; "class" }; "scrub" }
-        "rgba(0, 0, 0, 0.08)"
-        new { "=="; new { "get"; "class" }; "wood" }
-        "rgba(0, 0, 0, 0.12)"
-        "rgba(0, 0, 0, 0.03)"
+        "match"
+        new { "get"; "class" }
+        "grass"; constants.colors.landcover.grass
+        "scrub"; constants.colors.landcover.scrub  
+        "wood"; constants.colors.landcover.wood
+        "ice"; constants.colors.landcover.ice
+        "sand"; constants.colors.landcover.sand
+        constants.colors.landcover.default
       }
       ["fill-opacity"] = 1.0
+      ["fill-antialias"] = true
     }
   }
   
-  // Parks
-  new {
-    ["id"] = "park"
-    ["type"] = "fill"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "park"
-    ["minzoom"] = 6
-    ["layout"] = new {
-      ["visibility"] = "visible"
+  // Land use - consolidated (urban areas, parks, detailed landuse)
+  new classes.FillLayer {
+    id = "landuse_consolidated"
+    `source-layer` = "landuse"
+    minzoom = 5
+    paint = new {
+      ["fill-color"] = new {
+        "match"
+        new { "get"; "class" }
+        "residential"; constants.colors.landuse.residential
+        "commercial"; constants.colors.landuse.commercial
+        "industrial"; constants.colors.landuse.industrial
+        "cemetery"; constants.colors.landuse.cemetery
+        constants.colors.landuse.default
+      }
+      ["fill-opacity"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        5; 0.6
+        10; 0.8
+        14; 1.0
+      }
+      ["fill-antialias"] = true
     }
-    ["paint"] = new {
-      ["fill-color"] = "rgba(0, 0, 0, 0.06)"
+  }
+
+  // Parks - keeping separate for different source-layer
+  new classes.FillLayer {
+    id = "park"
+    `source-layer` = "park"
+    minzoom = 6
+    paint = new {
+      ["fill-color"] = constants.colors.park
       ["fill-opacity"] = new { 
         "step"
         new { "zoom" }
@@ -101,36 +135,14 @@ layers = new {
     }
   }
   
-  // Landuse
-  new {
-    ["id"] = "landuse"
-    ["type"] = "fill"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "landuse"
-    ["minzoom"] = 5
-    ["layout"] = new {
-      ["visibility"] = "visible"
-    }
-    ["paint"] = new {
-      ["fill-color"] = "rgba(0, 0, 0, 0.04)"
-      ["fill-opacity"] = new { 
-        "step"
-        new { "zoom" }
-        0.7
-        5; 0.6
-        14; 0.4
-      }
-    }
-  }
-  
   // Railways
   new {
-    ["id"] = "rail"
+    ["id"] = "rail_tracks"
     ["type"] = "line"
     ["source"] = "openmaptiles"
     ["source-layer"] = "transportation"
     ["minzoom"] = 13
-    ["filter"] = new { "all"; new { "=="; "class"; "rail" } }
+    ["filter"] = new { "all"; new { "=="; "class"; "rail" } }  // Simplified railway filter
     ["layout"] = new {
       ["visibility"] = "visible"
     }
@@ -139,8 +151,8 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        13; "rgb(150, 150, 150)"
-        17; "rgb(80, 80, 80)"
+        13; constants.tonerColors.gray.light
+        17; constants.colors.rail
       }
       ["line-width"] = new {
         "interpolate"
@@ -152,155 +164,157 @@ layers = new {
     }
   }
   
-  // Road secondary
-  new {
-    ["id"] = "road_secondary"
-    ["type"] = "line"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "transportation"
-    ["minzoom"] = 10
-    ["filter"] = new { 
+  // Railway lines
+  new classes.LineLayer {
+    id = "rail_base"
+    `source-layer` = "transportation"
+    minzoom = 13
+    filter = new { 
       "all"
-      new { "=="; "$type"; "LineString" }
-      new { "!in"; "class"; "pier"; "rail"; "path"; "primary" }
-      new { "in"; "class"; "secondary"; "tertiary"; "minor"; "service" }
+      new { "=="; "class"; "rail" }
+      new { "!="; "brunnel"; "tunnel" }
     }
-    ["layout"] = new {
-      ["line-cap"] = "round"
+    layout = new {
+      ["line-cap"] = "butt"  // Override default round for railways
       ["line-join"] = "round"
       ["visibility"] = "visible"
     }
-    ["paint"] = new {
+    paint = new {
       ["line-color"] = new {
         "step"
         new { "zoom" }
-        "rgb(220, 220, 220)"
-        10; "rgb(190, 190, 190)"
-        12; "rgb(150, 150, 150)"
-        15; "rgb(100, 100, 100)"
+        constants.tonerColors.gray.light
+        14; constants.tonerColors.gray.medium
+        17; constants.tonerColors.gray.dark
       }
       ["line-width"] = new {
         "step"
         new { "zoom" }
-        0.5
-        13; 3
-        15; 8
-        17; 10
+        0.7
+        5; 0.6
+        14; 0.4
       }
+      ["line-dasharray"] = new { 3; 3 }
     }
   }
   
-  // Road primary
+  // Railway hatching pattern
   new {
-    ["id"] = "road_primary"
+    ["id"] = "rail_hatch"
     ["type"] = "line"
     ["source"] = "openmaptiles"
     ["source-layer"] = "transportation"
-    ["minzoom"] = 8
+    ["minzoom"] = 15
     ["filter"] = new { 
       "all"
-      new { "=="; "$type"; "LineString" }
-      new { "!in"; "class"; "pier"; "rail"; "path" }
-      new { "=="; "class"; "primary" }
+      new { "=="; "class"; "rail" }
+      new { "!="; "brunnel"; "tunnel" }
     }
     ["layout"] = new {
-      ["line-cap"] = "round"
+      ["line-cap"] = "butt"
       ["line-join"] = "round"
       ["visibility"] = "visible"
     }
     ["paint"] = new {
-      ["line-color"] = new {
-        "interpolate"
-        new { "linear" }
+      ["line-color"] = constants.colors.rail
+      ["line-dasharray"] = new { 0.2; 1.0 }
+      ["line-width"] = new {
+        "step"
         new { "zoom" }
-        8; "rgb(240, 240, 240)"
-        10; "rgb(180, 180, 180)"
-        17; "rgb(100, 100, 100)"
+        2
+        17; 4
+      }
+    }
+  }
+  
+  // Roads - consolidated casing layer
+  new classes.LineLayer {
+    id = "roads_casing" 
+    `source-layer` = "transportation"
+    minzoom = 8
+    filter = new { 
+      "all"
+      new { "=="; "$type"; "LineString" }
+      new { "in"; "class"; "motorway"; "trunk"; "primary"; "secondary"; "tertiary"; "minor" }
+    }
+    paint = new {
+      ["line-color"] = new {
+        "match"
+        new { "get"; "class" }
+        new { "motorway"; "trunk" }; constants.tonerColors.road.casing
+        "primary"; constants.tonerColors.gray.medium
+        constants.tonerColors.gray.dark
       }
       ["line-width"] = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        12; 0.75
-        15; 6
-        17; 8
+        8; new { 
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; 4
+          "primary"; 2
+          1
+        }
+        16; new {
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; 16
+          "primary"; 8
+          4
+        }
       }
     }
   }
   
-  // Highway casing
-  new {
-    ["id"] = "road_highway_casing"
-    ["type"] = "line"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "transportation"
-    ["minzoom"] = 8
-    ["filter"] = new { 
+  // Roads - consolidated center layer
+  new classes.LineLayer {
+    id = "roads_center"
+    `source-layer` = "transportation"
+    minzoom = 6
+    filter = new { 
       "all"
       new { "=="; "$type"; "LineString" }
-      new { "!in"; "class"; "pier"; "path"; "rail" }
-      new { "in"; "class"; "motorway"; "trunk" }
+      new { "in"; "class"; "motorway"; "trunk"; "primary"; "secondary"; "tertiary"; "minor" }
     }
-    ["layout"] = new {
-      ["line-cap"] = "round"
-      ["line-join"] = "round"
-      ["visibility"] = "visible"
-    }
-    ["paint"] = new {
+    paint = new {
       ["line-color"] = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        6; "rgb(245, 245, 245)"
-        10; "rgb(255, 255, 255)"
-        16; "rgb(255, 255, 255)"
+        6; new {
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; constants.tonerColors.gray.light
+          "primary"; constants.tonerColors.gray.medium
+          constants.tonerColors.gray.dark
+        }
+        16; new {
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; constants.tonerColors.road.motorway
+          "primary"; constants.tonerColors.road.primary
+          constants.tonerColors.road.secondary
+        }
       }
-      ["line-opacity"] = 1
       ["line-width"] = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        10; 4
-        16; 16
-      }
-    }
-  }
-  
-  // Highway center
-  new {
-    ["id"] = "road_highway"
-    ["type"] = "line"
-    ["source"] = "openmaptiles"
-    ["source-layer"] = "transportation"
-    ["minzoom"] = 6
-    ["filter"] = new { 
-      "all"
-      new { "=="; "$type"; "LineString" }
-      new { "!in"; "class"; "pier"; "path"; "rail" }
-      new { "in"; "class"; "motorway"; "trunk" }
-    }
-    ["layout"] = new {
-      ["line-cap"] = "round"
-      ["line-join"] = "round"
-      ["visibility"] = "visible"
-    }
-    ["paint"] = new {
-      ["line-color"] = new {
-        "interpolate"
-        new { "linear" }
-        new { "zoom" }
-        6; "rgb(240, 240, 240)"
-        10; "rgb(180, 180, 180)"
-        16; "rgb(80, 80, 80)"
-      }
-      ["line-opacity"] = 1
-      ["line-width"] = new {
-        "interpolate"
-        new { "linear" }
-        new { "zoom" }
-        7; 1
-        10; 2
-        16; 8
+        6; new {
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; 1
+          "primary"; 0.75
+          0.5
+        }
+        16; new {
+          "match"
+          new { "get"; "class" }
+          new { "motorway"; "trunk" }; 8
+          "primary"; 6
+          3
+        }
       }
     }
   }
@@ -317,7 +331,7 @@ layers = new {
     }
     ["paint"] = new {
       ["fill-antialias"] = true
-      ["fill-color"] = "rgba(0, 0, 0, 0.08)"
+      ["fill-color"] = constants.colors.building
       ["fill-opacity"] = new {
         "interpolate"
         new { "linear" }
@@ -325,6 +339,40 @@ layers = new {
         13; 0.3
         15; 0.6
         17; 0.8
+      }
+    }
+  }
+  
+  // Administrative boundaries - state/province level
+  new {
+    ["id"] = "boundary_state"
+    ["type"] = "line"
+    ["source"] = "openmaptiles"
+    ["source-layer"] = "boundary"
+    ["minzoom"] = 4
+    ["maxzoom"] = 14
+    ["filter"] = new { 
+      "all"
+      new { "=="; "admin_level"; 4 }
+      new { "=="; "$type"; "LineString" }
+      new { "!="; "maritime"; 1 }
+      new { "!="; "disputed"; 1 }
+    }
+    ["layout"] = new {
+      ["line-cap"] = "round"
+      ["line-join"] = "round"
+      ["visibility"] = "visible"
+    }
+    ["paint"] = new {
+      ["line-color"] = constants.colors.boundary
+      ["line-dasharray"] = new { 2; 2 }
+      ["line-width"] = new {
+        "step"
+        new { "zoom" }
+        0.5
+        6; 0.8
+        10; 1.2
+        14; 2
       }
     }
   }
@@ -349,14 +397,7 @@ layers = new {
       ["visibility"] = "visible"
     }
     ["paint"] = new {
-      ["line-color"] = new {
-        "interpolate"
-        new { "linear" }
-        new { "zoom" }
-        3; "rgb(180, 180, 180)"
-        8; "rgb(160, 160, 160)"
-        14; "rgb(140, 140, 140)"
-      }
+      ["line-color"] = constants.colors.boundaryCountry
       ["line-width"] = new {
         "interpolate"
         new { "linear" }
@@ -400,8 +441,8 @@ layers = new {
       ["text-max-width"] = 10
     }
     ["paint"] = new {
-      ["text-color"] = "rgba(0, 0, 0, 0.8)"
-      ["text-halo-color"] = "rgba(255, 255, 255, 0.9)"
+      ["text-color"] = constants.tonerColors.text.stateText
+      ["text-halo-color"] = constants.tonerColors.text.halo
       ["text-halo-width"] = 1.5
     }
   }
@@ -437,8 +478,8 @@ layers = new {
       ["text-max-width"] = 8
     }
     ["paint"] = new {
-      ["text-color"] = "rgba(0, 0, 0, 0.8)"
-      ["text-halo-color"] = "rgba(255, 255, 255, 0.9)"
+      ["text-color"] = constants.tonerColors.text.cityText
+      ["text-halo-color"] = constants.tonerColors.text.halo
       ["text-halo-width"] = 1.5
     }
   }
@@ -463,9 +504,10 @@ layers = new {
         "interpolate"
         new { "linear" }
         new { "zoom" }
-        2; 12
-        4; 16
-        6; 20
+        2; 8.0       // 最小サイズを8に設定
+        4; 12.5      // ズームレベル4でのサイズを保持
+        5; 13.2
+        7; 20
       }
       ["text-transform"] = "none"
       ["visibility"] = "visible"
@@ -477,9 +519,48 @@ layers = new {
       ["symbol-sort-key"] = 1
     }
     ["paint"] = new {
-      ["text-color"] = "rgba(0, 0, 0, 1.0)"
-      ["text-halo-color"] = "rgba(255, 255, 255, 1.0)"
-      ["text-halo-width"] = 2.5
+      ["text-color"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        1; "rgba(0, 0, 0, 0.0)"      // 最低ズームレベルでは透明
+        4; constants.tonerColors.text.countryText    // 黒で国名を強調
+        18; constants.tonerColors.text.countryText   // 高ズームレベルでも黒
+      }
+      ["text-halo-color"] = constants.tonerColors.text.haloSolid
+      ["text-halo-width"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        2; 1.0
+        4; 1.3
+        5; 1.2
+        7; 2.4
+      }
+    }
+  }
+  
+  // Building polygons
+  new {
+    ["id"] = "building_polygons"
+    ["type"] = "fill"
+    ["source"] = "openmaptiles"
+    ["source-layer"] = "building"
+    ["minzoom"] = 16
+    ["layout"] = new {
+      ["visibility"] = "visible"
+    }
+    ["paint"] = new {
+      ["fill-antialias"] = true
+      ["fill-color"] = constants.tonerColors.transparent.dark
+      ["fill-opacity"] = new {
+        "interpolate"
+        new { "linear" }
+        new { "zoom" }
+        16; 0.3
+        18; 0.8
+      }
+      ["fill-outline-color"] = constants.tonerColors.text.primary
     }
   }
 }

@@ -1,0 +1,31 @@
+// Layer base class for common properties
+open class Layer {
+  id: String
+  type: String
+  source: String = "openmaptiles"  // Default to main source
+  minzoom: Number?
+  maxzoom: Number?
+  layout: Mapping?
+  paint: Mapping?
+  filter: Any?  // MapLibre filter expressions can be complex
+  `source-layer`: String?  // Use backticks for hyphenated properties
+}
+
+// Specialized Fill Layer class
+open class FillLayer extends Layer {
+  type: String = "fill"  // Default type for fill layers
+}
+
+// Specialized Line Layer class  
+open class LineLayer extends Layer {
+  type: String = "line"  // Default type for line layers
+  layout: Mapping = new {
+    ["line-cap"] = "round"
+    ["line-join"] = "round"
+  }
+}
+
+// Specialized Symbol Layer class
+open class SymbolLayer extends Layer {
+  type: String = "symbol"  // Default type for symbol layers
+}

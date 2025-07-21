@@ -22,15 +22,23 @@ const map = new maplibregl.Map({
     hash: true // URL同期
 });
 
-// マップ読み込み完了時の処理
-map.on('load', () => {
-});
-
 // ナビゲーションコントロールを追加
 map.addControl(new maplibregl.NavigationControl());
 
-// GlobeControlを追加
-map.addControl(new maplibregl.GlobeControl());
+// GlobeControlが利用可能かチェックして追加
+let globeControl;
+if (maplibregl.GlobeControl) {
+    globeControl = new maplibregl.GlobeControl();
+    map.addControl(globeControl);
+}
+
+// マップ読み込み完了時の処理
+map.on('load', () => {
+    // GlobeControlが存在し、isActiveメソッドが利用可能な場合のみ実行
+    if (globeControl && typeof globeControl.isActive === 'function' && !globeControl.isActive()) {
+        globeControl.toggle();
+    }
+});
 
 // スケールコントロールを追加
 map.addControl(new maplibregl.ScaleControl({maxWidth: 100,unit: 'metric'}));

@@ -1,23 +1,272 @@
-# Technical Details and Implementation Notes
+# MapLibre GL JS Toner Globe - Architecture Notes
 
-This document contains technical implementation details, troubleshooting information, and development considerations for the MapLibre GL JS Globe Toner Site project.
+## Overview
+This project generates a MapLibre GL JS style for a globe-focused Toner cartographic style with emphasis on Central Asian geography.
 
-## Project Overview
+## Development Process
 
-The application displays a 3D globe view centered on **Bishkek, Kyrgyzstan** (74.5698°E, 42.8746°N), showcasing Central Asian geography with a monochromatic Toner style design.
+This project was developed with significant assistance from **GitHub Copilot Agent Mode** using the **Claude Sonnet 4** model. The AI provided comprehensive support for:
 
-## Recent Development History
+- Apple Pkl configuration architecture and type-safe color system design
+- MSX 16-color palette implementation and hierarchical color organization  
+- MapLibre GL JS expression optimization and layer configuration refinement
+- Build system integration with GitHub Pages deployment automation
 
-### Map Center Update (July 2025)
+## Current Architecture (Simplified)
 
-- **Geographic focus**: Changed from Japan to Central Asia, centered on Bishkek, Kyrgyzstan
-- **Coordinate update**: Updated both style.pkl and main.js to use [74.5698, 42.8746]
-- **Regional coverage**: Provides excellent view of Central Asian countries and Silk Road regions
+### Project Structure
+```
+### Project Structure
+```text
+toner-globe/
+├── style-generation/           # Style configuration
+│   └── style.pkl              # Main style definition (ACTIVE)
+├── docs/                      # GitHub Pages deployment
+│   └── style.json            # Generated style file
+├── public/                    # Build output
+│   └── style.json            # Generated style file
+├── main.js                   # MapLibre GL JS application
+├── Makefile                  # Build commands
+└── package.json              # Dependencies and scripts
+```
 
-### UI Simplification (July 2025)
+### File Descriptions
 
-- **Removed complex control panels**: Eliminated pitch/zoom sliders and toggle buttons for cleaner interface
-- **Removed loading indicators**: Direct map loading for immediate user engagement  
+#### `style-generation/style.pkl` (Primary File)
+- **Purpose**: Main style configuration file that generates the active `style.json`
+- **Format**: Apple Pkl configuration language
+- **Features**:
+  - Comprehensive Toner-style layers
+  - Japanese localization priority (`name:ja` → `name` fallback)
+  - Hierarchical label transparency (Country: 100%, City: 50%, State: 40%)
+  - Zoom-responsive typography with interpolated sizing
+  - Central Asia geographic focus (Bishkek center: 74.5698°E, 42.8746°N)
+```
+
+### File Descriptions
+
+#### `style-generation/style.pkl` (Primary File)
+- **Purpose**: Main style configuration file that generates the active `style.json`
+- **Format**: Apple Pkl configuration language
+- **Features**:
+  - Comprehensive Toner-style layers
+  - Japanese localization priority (`name:ja` → `name` fallback)
+  - Hierarchical label transparency (Country: 100%, City: 50%, State: 40%)
+  - Zoom-responsive typography with interpolated sizing
+  - Central Asia geographic focus (Bishkek center: 74.5698°E, 42.8746°N)
+
+#### `style-generation/simple-style.pkl` (Reference)
+- **Purpose**: Simplified reference implementation
+- **Usage**: Available via `npm run style:simple` for testing
+- **Status**: Maintained for comparison and backup purposes
+
+### Build System
+
+#### Commands
+```bash
+make style      # Generate style.json from style.pkl
+make dev        # Start development server
+make build      # Build for production deployment
+```
+
+#### Process Flow
+1. `style.pkl` → `public/style.json` (Pkl evaluation)
+2. `public/style.json` → `docs/style.json` (GitHub Pages copy)
+3. MapLibre GL JS loads `./style.json` or `/style.json` (environment-aware)
+
+### Style Configuration Details
+
+#### Data Sources
+- **Primary**: OpenStreetMap Japan vector tiles
+- **Territorial**: Takeshima and Hoppo datasets
+- **Fonts**: Noto Sans JP + Open Sans (Japanese priority)
+- **Sprites**: MapTiler Toner sprite set
+
+#### Layer Hierarchy (Bottom to Top)
+1. **Background**: White (#fff)
+2. **Water Features**: Semi-transparent fills and waterways
+3. **Land Use**: Subtle patterns for parks, residential areas
+4. **Transportation**: Roads, railways with zoom-dependent visibility
+5. **Boundaries**: Administrative borders (state/country levels)
+6. **Buildings**: Footprint visualization at high zoom
+7. **Labels**: Hierarchical text with Japanese localization
+
+#### Label Typography System
+```pkl
+// Country labels (highest priority)
+text-color: "rgba(0, 0, 0, 1.0)"    // 100% opacity
+text-size: [
+  2: 9.6,   // 20% larger than original 8
+  5: 13.2,  // 20% larger than original 11
+  7: 20.4   // 20% larger than original 17
+]
+
+// State/Province labels
+text-color: "rgba(0, 0, 0, 0.4)"    // 40% opacity
+
+// City labels  
+text-color: "rgba(0, 0, 0, 0.5)"    // 50% opacity
+```
+
+### Globe Configuration
+- **Projection**: `'globe'` with automatic GlobeControl activation
+- **Default State**: Globe mode enabled on map load
+- **Fallback**: Mercator projection for compatibility
+
+### Deployment
+- **Platform**: GitHub Pages
+- **URL**: Served from `docs/` directory
+- **CDN**: Static asset delivery
+- **HTTPS**: Secure content delivery
+
+## Decision History
+
+### Modularization Abandonment (2025-07-20)
+- **Reason**: Multiple attempts at Pkl module system resulted in syntax errors and import issues
+- **Solution**: Simplified to monolithic `.pkl` files with inline definitions
+- **Benefit**: Reduced complexity, guaranteed build reliability
+- **Trade-off**: Some code duplication accepted for stability
+
+### File Cleanup (2025-07-20)
+- **Removed**: `layers/`, `config/`, experimental modular files
+- **Kept**: Working `style.pkl` and reference `simple-style.pkl`
+- **Result**: 2-file style generation system with clear purpose
+
+### Label Hierarchy Implementation (2025-07-20)
+- **Country Labels**: Enhanced to 20% larger font size, 100% opacity
+- **Other Labels**: Reduced opacity for visual hierarchy (State: 40%, City: 50%)
+- **Result**: Clear geographic information prioritization
+
+## Development Guidelines
+
+### Making Style Changes
+1. Edit `style-generation/style.pkl`
+2. Run `make style` to regenerate
+3. Test with `make dev`
+4. Deploy with `make build`
+
+### Color Adjustments
+- Use `rgba()` values for transparency control
+- Maintain label hierarchy (Country > City > State)
+- Test across zoom levels 2-18
+
+### Performance Considerations
+- Monitor style.json size (~20KB currently)
+- Vector tile efficiency at high zoom levels
+- Globe rendering WebGL requirements
+
+## Technical Notes
+
+### Environment Path Resolution
+```javascript
+const getStylePath = () => {
+    return import.meta.env.DEV ? '/style.json' : './style.json';
+};
+```
+
+### Known Limitations
+- Globe mode requires modern WebGL support
+- Japanese font loading depends on external CDN
+- Some Toner features simplified for performance
+
+This architecture prioritizes reliability and maintainability over modular complexity, ensuring consistent style generation and deployment.
+
+## Style.pkl Complexity Analysis and Reduction Strategy
+
+### Current File Statistics
+- **Total lines**: 691 lines
+- **Layer definitions**: ~20 major layer groups
+- **Complexity indicators**: 212 `new {}` object instantiations
+
+### Complexity Reduction Strategies
+
+#### 1. Layer Consolidation (Immediate Impact)
+**Target**: Merge similar layer definitions
+```pkl
+// BEFORE: Separate layers for each road type
+// road-secondary, road-primary, highway-casing, highway-center
+
+// AFTER: Single parameterized road layer with expressions
+new {
+  ["id"] = "roads"
+  ["type"] = "line"
+  ["filter"] = new { "in"; "class"; "trunk"; "primary"; "secondary"; "tertiary" }
+  ["paint"] = new {
+    ["line-width"] = new {
+      "interpolate"
+      new { "linear" }
+      new { "zoom" }
+      5; new { "case"; new { "=="; new { "get"; "class" }; "trunk" }; 3; 1 }
+      18; new { "case"; new { "=="; new { "get"; "class" }; "trunk" }; 24; 8 }
+    }
+  }
+}
+```
+
+#### 2. Filter Expression Simplification
+**Target**: Reduce complex nested filter conditions
+```pkl
+// BEFORE: Multiple condition checks
+["filter"] = new {
+  "all"
+  new { "!="; "brunnel"; "tunnel" }
+  new { "=="; "$type"; "Polygon" }
+  new { "!="; "intermittent"; 1 }
+}
+
+// AFTER: Single expression-based filter
+["filter"] = new { "!"; new { "in"; "brunnel"; "tunnel" } }
+```
+
+#### 3. Paint Property Optimization
+**Target**: Reduce repetitive style definitions
+```pkl
+// Define common style constants at file top
+local commonColors = new {
+  water = "#E8F4F8"
+  land = "#FEFEFE"  
+  boundary = "#B3B3B3"
+  text = "#333333"
+}
+
+// Use throughout layers
+["background-color"] = commonColors.land
+```
+
+#### 4. Interpolation Function Reuse
+**Target**: Create reusable zoom-based functions
+```pkl
+// Define at top level
+local zoomWidthInterpolation = (minWidth: Number, maxWidth: Number) -> new {
+  "interpolate"
+  new { "linear" }
+  new { "zoom" }
+  5; minWidth
+  18; maxWidth
+}
+
+// Use in layers
+["line-width"] = zoomWidthInterpolation(1, 8)
+```
+
+### Estimated Complexity Reduction
+- **Lines**: 691 → ~400 lines (-42%)  
+- **Layer objects**: 20 → ~12 layers (-40%)
+- **Maintainability**: Significantly improved through constants and functions
+- **Build performance**: Faster Pkl evaluation
+
+### Implementation Priority
+1. **Phase 1**: Consolidate road layers (immediate 20% reduction)
+2. **Phase 2**: Extract common style constants (improved maintainability)  
+3. **Phase 3**: Optimize filter expressions (performance improvement)
+4. **Phase 4**: Create reusable interpolation functions (code reuse)
+
+### Risk Assessment
+- **Low Risk**: Layer consolidation and constant extraction
+- **Medium Risk**: Filter expression changes (requires thorough testing)
+- **Testing Required**: Visual comparison before/after each phase
+
+This reduction strategy maintains full visual fidelity while significantly improving code maintainability and reducing complexity.  
 - **Removed keyboard shortcuts**: Simplified interaction model focusing on native MapLibre controls
 - **Added GlobeControl**: Integrated MapLibre GL JS 5.6.1's built-in globe/mercator switching
 

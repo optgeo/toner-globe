@@ -1,25 +1,26 @@
 # 🌍 Toner Globe
 
-A modern web application that displays OpenStreetMap data in an interactive 3D globe view using MapLibre GL JS, styled with a customizable monochromatic Toner theme featuring Japanese labels. The application showcases Central Asia, centered on Bishkek, Kyrgyzstan.
+A modern web application that displays OpenStreetMap data in an interactive 3D globe view using MapLibre GL JS, styled with an MSX Color Palette-inspired Toner theme featuring Japanese labels. The application showcases Central Asia, centered on Bishkek, Kyrgyzstan.
 
 🔗 **Live Demo**: [https://optgeo.github.io/toner-globe/](https://optgeo.github.io/toner-globe/)
-📂 **Repository**: [https://github.com/optgeo/toner-globe](https://github.com/optgeo/toner-globe)
+📂 **Repository**: [https://github.com/optgeo/toner-globe](https://github.com/optgeo/toner-globe/)
 
 ![Toner Globe Preview](https://img.shields.io/badge/MapLibre-GL%20JS-blue) ![Pkl](https://img.shields.io/badge/Apple-Pkl-orange) ![Vite](https://img.shields.io/badge/Vite-Build-purple) ![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-green)
 
 ## ✨ Features
 
 - 🌍 **3D Globe Mode**: Interactive globe visualization with atmosphere effects
-- 🗺️ **Toner Style**: Elegant monochromatic design based on OpenStreetMap Japan Toner
+- 🎮 **MSX Color Palette**: Retro-inspired color scheme based on classic MSX computer colors
+- 🗺️ **Refined Toner Style**: Elegant monochromatic design with selective color accents
 - 🇰🇬 **Central Asia View**: Centered on Bishkek, Kyrgyzstan, showcasing Central Asian geography
 - 🇯🇵 **Japanese Labels**: Prioritizes Japanese text rendering (`name:ja`) with English fallback
-- 📐 **Type-Safe Configuration**: Uses Apple Pkl for maintainable style generation
+- 📐 **Type-Safe Configuration**: Uses Apple Pkl for maintainable modular style generation
 - ⚡ **Fast Development**: Vite-powered development server with hot reload
 - 📱 **Clean Interface**: Minimalist design focusing on the map content
 - 🌐 **Globe Controls**: Built-in projection switching between Globe and Mercator modes
 - 🚀 **Easy Deployment**: One-command deployment to GitHub Pages
 - 🎯 **Modular Architecture**: Clean separation of styles, layers, and configuration
-- 🗾 **Smart Boundary Display**: Excludes maritime and disputed boundaries for cleaner visualization
+- 🗾 **Smart Boundary Display**: Color-coded boundaries with hierarchical emphasis
 
 ## 🎮 Interactive Controls
 
@@ -73,25 +74,56 @@ npm run build
 
 Built files will be output to the `docs/` directory for GitHub Pages deployment.
 
-## 🏗️ Project Structure
+## 🏗️ Architecture
 
-```plaintext
-├── Makefile                   # Build commands and workflows
-├── package.json              # Dependencies and npm scripts
-├── vite.config.js            # Vite configuration
-├── index.html                # Development entry point
-├── main.js                   # Main application JavaScript
-├── docs/                     # GitHub Pages deployment directory
-│   ├── index.html           # Production HTML
-│   └── style.json           # Generated MapLibre style
-└── style-generation/         # Apple Pkl style configuration
-    ├── style.pkl            # 🎯 Main modular style configuration
-    ├── simple-style.pkl     # Simplified reference implementation
-    ├── config/
-    │   ├── Colors.pkl       # Color palette definitions
-    │   └── Sources.pkl      # Vector tile source configurations
-    └── layers/
-        └── Basic.pkl        # Layer definitions and styling
+The project follows a modular architecture with type-safe configuration management:
+
+### Core Files
+
+- **`index.html`** - Main HTML entry point with MapLibre container
+- **`main.js`** - JavaScript application logic with MapLibre initialization
+- **`style.json`** - Generated MapLibre GL style (auto-generated from Pkl)
+- **`vite.config.js`** - Vite build configuration for development and production
+
+### Configuration System
+
+- **`style.pkl`** - Main style configuration (567 lines) defining layers and visual properties
+- **`constants.pkl`** - MSX Color Palette definitions (110 lines) and color abstractions
+- **`classes.pkl`** - Reusable layer class definitions (31 lines) for DRY architecture
+- **`Makefile`** - Build automation for Pkl compilation and deployment
+
+### MSX Color Palette
+
+The application uses a carefully curated MSX-inspired color scheme:
+
+#### Primary Colors
+
+- **Water**: `darkBlue` (#3C5EB8) - Deep ocean blue
+- **Land**: `white` (#FFFFFF) - Clean monochromatic base
+- **Boundaries**: Red hierarchy - Country (#FC7753) to State (#B75E51)
+- **Labels**: Monochromatic hierarchy - Black to light gray (#999999)
+
+#### Technical Implementation
+
+```pkl
+msxColors = new Mapping {
+  ["black"] = "#000000"
+  ["darkBlue"] = "#3C5EB8" 
+  ["green"] = "#3EBF3E"
+  ["lightBlue"] = "#7FC8FF"
+  ["darkRed"] = "#B75E51"
+  ["magenta"] = "#D85295"
+  ["brown"] = "#A68C5B"
+  ["lightGray"] = "#CCCCCC"
+  ["darkGray"] = "#666666"
+  ["lightGreen"] = "#3EFF3E"
+  ["lightYellow"] = "#FFFF85"
+  ["lightRed"] = "#FC7753"
+  ["pink"] = "#FF8ECC"
+  ["yellow"] = "#D9D852"
+  ["white"] = "#FFFFFF"
+  ["gray"] = "#999999"
+}
 ```
 
 ## 📝 Style Configuration
@@ -100,20 +132,13 @@ This project uses **Apple Pkl** for type-safe, modular style configuration:
 
 ### Main Configuration Files
 
-- **`style.pkl`**: Main modular style configuration with full layer support
-- **`simple-style.pkl`**: Reference implementation with inline definitions
-- **`config/Colors.pkl`**: Centralized color palette (monochromatic tones)
-- **`config/Sources.pkl`**: OpenStreetMap Japan vector tile sources
-- **`layers/Basic.pkl`**: Complete layer definitions for all map elements
+- **`style.pkl`**: Main style configuration with comprehensive layer support
 
 ### Generate Styles
 
 ```bash
-# Generate from modular configuration (recommended)
+# Generate style.json from style.pkl
 make style
-
-# Generate from simple configuration
-npm run style:simple
 
 # Validate generated style
 npm run lint:style
@@ -148,6 +173,18 @@ npm run lint:style
 - **[Vite](https://vitejs.dev/)**: Next-generation build tooling
 - **[OpenStreetMap Japan](https://tile.openstreetmap.jp/)**: Vector tile data source
 - **GitHub Pages**: Static site hosting
+
+## 🤖 Development Process
+
+This project was developed using **GitHub Copilot Agent Mode** in Visual Studio Code with the **Claude Sonnet 4** model. The AI assistant provided comprehensive support for:
+
+- **Configuration Architecture**: Designing the modular Pkl-based style system
+- **MSX Color Palette Integration**: Implementing retro-inspired color schemes
+- **Code Optimization**: Reducing configuration complexity from 624 to 707 lines with improved maintainability
+- **Documentation**: Generating comprehensive technical documentation
+- **Build System**: Setting up efficient development and deployment workflows
+
+The combination of GitHub Copilot's contextual understanding and Claude Sonnet 4's advanced reasoning capabilities enabled rapid prototyping and iterative refinement of the cartographic design system.
 
 ## 🎨 Design Philosophy
 

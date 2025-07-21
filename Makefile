@@ -3,7 +3,7 @@
 .PHONY: style dev build clean help deploy
 
 style:
-	# Generate style.json from modular style.pkl
+	# Generate style.json from style.pkl
 	pkl eval -f json style-generation/style.pkl > public/style.json
 	# Copy to docs for GitHub Pages deployment
 	cp public/style.json docs/style.json

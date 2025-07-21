@@ -1,0 +1,110 @@
+// Toner style - MSX Color Palette Based
+// MSX標準16色パレットを基準とした色定義
+msxColors = new {
+  // MSX Primary Colors (基本16色)
+  black = "#000000"           // 0: Black
+  darkGreen = "#3EB849"       // 1: Dark Green
+  lightGreen = "#74D07D"      // 2: Light Green  
+  darkBlue = "#3C5EB8"        // 3: Dark Blue
+  lightBlue = "#7D75FC"       // 4: Light Blue
+  darkRed = "#B75E51"         // 5: Dark Red
+  cyan = "#64DAEE"            // 6: Cyan
+  red = "#FC7753"             // 7: Red
+  white = "#FFFFFF"           // 8: White
+  yellow = "#FDD83C"          // 9: Yellow
+  lightYellow = "#FFE785"     // 10: Light Yellow
+  darkYellow = "#BD9C38"      // 11: Dark Yellow
+  magenta = "#B95EFC"         // 12: Magenta
+  gray = "#CCCCCC"            // 13: Gray
+  mediumGreen = "#3EB849"     // 14: Medium Green
+  lightGray = "#DDDDDD"       // 15: Light Gray (extended)
+}
+
+// Toner スタイル用のモノクロ階調（MSXグレー系をベース）
+tonerColors = new {
+  // 基本モノトーン
+  white = msxColors.white
+  black = msxColors.black
+  
+  // グレー階調 - MSX grays + variations
+  gray = new {
+    lightest = msxColors.lightGray    // #DDDDDD
+    lighter = "#E8E8E8"               // MSX gray variant
+    light = msxColors.gray            // #CCCCCC  
+    medium = "#999999"                // Medium gray
+    dark = "#666666"                  // Dark gray
+    darkest = "#333333"               // Darkest gray
+  }
+  
+  // 透明色 - 黒ベースの透明度バリエーション
+  transparent = new {
+    // 非常に薄い (0.03-0.06 alpha)
+    ultraLight = "rgba(0, 0, 0, 0.04)"
+    veryLight = "rgba(0, 0, 0, 0.06)"
+    
+    // 薄い (0.08-0.12 alpha)  
+    light = "rgba(0, 0, 0, 0.08)"
+    mediumLight = "rgba(0, 0, 0, 0.12)"
+    
+    // 中程度 (0.15-0.20 alpha)
+    medium = "rgba(0, 0, 0, 0.15)"
+    mediumDark = "rgba(0, 0, 0, 0.18)"
+    
+    // 濃い (0.30+ alpha)  
+    dark = "rgba(0, 0, 0, 0.30)"
+    veryDark = "rgba(0, 0, 0, 0.50)"
+  }
+  
+  // テキスト色 - 抑制的なモノクロ階層
+  text = new {
+    primary = msxColors.black
+    secondary = "rgba(0, 0, 0, 0.5)"
+    tertiary = "rgba(0, 0, 0, 0.4)"
+    halo = "rgba(255, 255, 255, 0.9)"
+    haloSolid = msxColors.white
+    
+    // モノクロラベル階層 - 抑制的な色使い
+    countryText = msxColors.black            // #000000 - 最も重要（国名用）
+    stateText = tonerColors.gray.dark        // #666666 - 中程度の重要度（州・地域名用）  
+    cityText = tonerColors.gray.medium       // #999999 - 補助的（都市名用）
+  }
+  
+  // 道路色 - MSXグレー系を使用
+  road = new {
+    motorway = "#808080"              // Medium gray
+    primary = "#606060"               // Dark medium gray  
+    secondary = "#505050"             // Darker gray
+    casing = tonerColors.gray.lighter // Light gray casing
+  }
+}
+
+// レイヤー別色マッピング - MSXベースの統一パレット
+colors = new {
+  background = tonerColors.white
+  water = msxColors.darkBlue                 // MSXダークブルーで水域を表現
+  waterway = tonerColors.transparent.dark  
+  building = tonerColors.transparent.light
+  park = tonerColors.transparent.veryLight
+  rail = tonerColors.gray.dark               // MSXグレーを使用
+  boundary = msxColors.darkRed               // 地方境界を暗い赤に
+  boundaryCountry = msxColors.red            // 国境を明るい赤に変更
+  
+  // ランドユース - 透明度で区別
+  landuse = new {
+    residential = tonerColors.transparent.ultraLight
+    commercial = "rgba(0, 0, 0, 0.05)"
+    cemetery = tonerColors.transparent.veryLight
+    industrial = tonerColors.transparent.light
+    default = tonerColors.transparent.ultraLight
+  }
+  
+  // ランドカバー - 種類別に統合
+  landcover = new {
+    grass = tonerColors.transparent.light
+    scrub = tonerColors.transparent.mediumLight
+    wood = tonerColors.transparent.mediumDark
+    ice = "rgba(0, 0, 0, 0.05)"
+    sand = tonerColors.transparent.veryLight
+    default = tonerColors.transparent.ultraLight
+  }
+}
